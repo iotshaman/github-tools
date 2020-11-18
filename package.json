@@ -1,0 +1,58 @@
+{
+  "name": "github-tools",
+  "version": "0.0.1",
+  "description": "CLI tools to manage github projects.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "nyc mocha",
+    "build": "tsc",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "private": true,
+  "typings": "public_api.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iotshaman/github-tools.git"
+  },
+  "author": "Kyle Brown",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotshaman/github-tools/issues"
+  },
+  "homepage": "https://github.com/iotshaman/github-tools#readme",
+  "devDependencies": {
+    "@types/chai": "~4.2.14",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.14.2",
+    "@types/sinon": "9.0.8",
+    "@types/yargs": "^15.0.10",
+    "chai": "^4.2.0",
+    "coveralls": "^3.1.0",
+    "mocha": "^8.2.0",
+    "nyc": "^15.1.0",
+    "sinon": "^9.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "yargs": "^16.1.1"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.spec.ts",
+      "**/*.js",
+      "coverage/*",
+      "dist/*",
+      "**/*.mock.ts"
+    ],
+    "reporter": [
+      "html",
+      "lcov"
+    ],
+    "all": true
+  }
+}
