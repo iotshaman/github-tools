@@ -19,7 +19,8 @@ export class BackupCommand implements ICommand {
       .then(files => files.map(f => this.sanitizePath(path, f)))
       .then(files => ["!**/node_modules/**/*", ...files])
       .then(files => this.getFilesFromGlob(path, files))
-      .then(files => files.map(f => this.sanitizePath(path, f)))
+      .then(files => files.map(f => this.sanitizePath(path, f, "")))
+      .then(files => files.map(f => new FileData(f)))
       .then(files => this.createArchive(path, files));
   }
 
@@ -34,7 +35,7 @@ export class BackupCommand implements ICommand {
     return `${prefix}${path}`;
   }
 
-  private createArchive = (path: string, files: string[]): Promise<void> => {
+  private createArchive = (path: string, files: FileData[]): Promise<void> => {
     return new Promise((res, err) => {
       console.log(`Archiving ${files.length} files.`);
       let archive = _archive("zip");
@@ -42,10 +43,31 @@ export class BackupCommand implements ICommand {
       const output = _fs.createWriteStream(archivePath);
       output.on("finish", () => res());
       archive.pipe(output);
-      archive.on("error", ex => { err(ex); })
-      files.forEach((f, i) => archive.append('testing', {name: `${i}.txt`, prefix: 'test1/test2/'}));
+      archive.on("error", ex => { err(ex); });
+      files.forEach(f => {
+        let stream = _fs.createReadStream(_path.join(path, f.filePath));
+        archive.append(stream, {name: f.fileName, prefix: f.path});
+      });
       archive.finalize();
     });
+  }
+
+}
+
+class FileData {
+
+  constructor(public filePath: string) { }
+
+  public get fileName(): string {
+    let index = this.filePath.lastIndexOf('/');
+    if (index < 0) return this.filePath;
+    return this.filePath.substring(index + 1);    
+  }
+
+  public get path(): string {
+    let filename = this.fileName;
+    let path = this.filePath.replace(filename, "");
+    return path == filename ? "" : `${path}/`
   }
 
 }
