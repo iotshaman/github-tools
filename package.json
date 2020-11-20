@@ -8,6 +8,9 @@
     "build": "tsc",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
+  "bin": {
+    "gtl": "./dist/github-tools.cli.js"
+  },
   "private": true,
   "typings": "public_api.d.ts",
   "repository": {
@@ -21,6 +24,7 @@
   },
   "homepage": "https://github.com/iotshaman/github-tools#readme",
   "devDependencies": {
+    "@types/archiver": "^3.1.1",
     "@types/chai": "~4.2.14",
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.14.2",
@@ -35,6 +39,8 @@
     "typescript": "^4.0.3"
   },
   "dependencies": {
+    "archiver": "^5.1.0",
+    "fast-glob": "^3.2.4",
     "yargs": "^16.1.1"
   },
   "nyc": {

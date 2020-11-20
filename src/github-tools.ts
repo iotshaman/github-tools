@@ -1,6 +1,7 @@
 import { ICommand } from "./commands/command";
 import { ArgumentList } from "./argument-list";
 import { ReleaseCommand } from "./commands/release.command";
+import { BackupCommand } from "./commands/backup.command";
 
 export class GithubTools {
 
@@ -16,5 +17,6 @@ export class GithubTools {
 }
 
 const GithubToolsCommands: ICommand[] = [
-  new ReleaseCommand()
+  new ReleaseCommand(),
+  new BackupCommand()
 ]
