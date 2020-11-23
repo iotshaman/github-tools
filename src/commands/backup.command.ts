@@ -13,7 +13,7 @@ export class BackupCommand implements ICommand {
 
   run = (args: ArgumentList): Promise<void> => {
     let path = _path.join(process.cwd(), args.root ?? "./");
-    let patterns = ["**/.gitignore", "!**/node_modules/*"];
+    let patterns = ["*/.gitignore", "!**/node_modules/**/*"];
     return this.getFilesFromGlob(path, patterns)
       .then(files => files.map(f => f.replace(".gitignore", "**/*")))
       .then(files => files.map(f => this.sanitizePath(path, f)))
