@@ -10,6 +10,7 @@ import { FileData } from '../models/file-data';
 export class BackupCommand implements ICommand {
 
   globService = _glob;
+  archiveService = _archive;
   get name(): string { return "backup"; }
 
   run = (args: ArgumentList): Promise<void> => {
@@ -28,7 +29,7 @@ export class BackupCommand implements ICommand {
   }
 
   private getFilesFromGlob = (cwd: string, patterns: string[]): Promise<string[]> => {
-    return this.globService(patterns, {cwd}).then((rslt: string[]) => {
+    return this.globService(patterns, {cwd, dot: true}).then((rslt: string[]) => {
       return rslt.map(file => _path.join(cwd, file))
     });
   }
@@ -41,11 +42,11 @@ export class BackupCommand implements ICommand {
   private createArchive = (path: string, files: FileData[], outputFile: string, verbose: boolean): Promise<void> => {
     return new Promise((res, err) => {
       console.log(`Archiving ${files.length} files.`);
-      let archive = _archive("zip");
+      let archive = this.archiveService("zip");
       let archivePath = _path.join(path, outputFile ?? "./github.backup.zip");
       const output = _fs.createWriteStream(archivePath);
-      output.on("finish", () => res());
       archive.pipe(output);
+      output.on("finish", () => res());
       archive.on("error", ex => { err(ex); });
       files.forEach(f => {
         let stream = _fs.createReadStream(_path.join(path, f.filePath));

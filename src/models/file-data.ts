@@ -10,8 +10,7 @@ export class FileData {
 
   public get path(): string {
     let filename = this.fileName;
-    let path = this.filePath.replace(filename, "");
-    return path == filename ? "" : `${path}/`
+    return this.filePath.replace(filename, "");
   }
   
 }
